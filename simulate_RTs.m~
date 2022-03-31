@@ -1,0 +1,48 @@
+function [outputArg1,outputArg2] = simulate_RTs(inputArg1,inputArg2)
+%SIMULATE_RTs - simulate RTs using the LBA model
+% this function will provide a distribution of RTs
+% given the input parmaters 
+% Input Args:
+%   t0: non-decision/basetime, e.g. 0.1
+%    b: criterion, e.g. 2
+%    a: upper end of startpoint distribution - e.g. .5
+%    s: std dev of rates, e.g. 1
+%    v: value of drift, e.g. 6 for fast, 4 for low
+%    n: number of trials
+
+%% generate data
+% LBA parameters
+% ~~~~~~~~~~~~~~
+% We use values our bimodality m.s.: s=1, t0=0.1, A=0.5, b=1, and v=6
+%    t0, b, and A can be left fixed
+t0 = .1;        % basetime
+b = 2;          % criterion value (was originally b = 1)
+a = .5;         % upper end of start-point distribution, ~uniform [0, a]
+
+% Rate values (mean) should vary across HH, HL, etc.
+%     rates in LBA are sampled on each trials from Normal dist, with mean v
+%     and stdev s; thus, ~N(v, s).
+s = 1;              % std dev of the rates
+v1_hi = 6; v2_hi = 6; % @@@@@ mean rates for High condition, channels 1 & 2
+v1_lo = 4; v2_lo = 4; % @@@@@ mean rates for Low condition, channels 1 & 2
+
+ % repeat simulation 
+
+ntrials = 1000;
+% Sample random values for rate V and start point A (repeat sampling since channels are iid)
+V1_hi = normrnd(v1_hi, s, ntrials, 1);
+V2_hi = normrnd(v2_hi, s, ntrials, 1);
+V1_lo = normrnd(v1_lo, s, ntrials, 1);
+V2_lo = normrnd(v2_lo, s, ntrials, 1);
+A = unifrnd(0, a, ntrials, 4);
+
+% calculating processing time T for each channel (not for the entire system, yet)
+T1_hi = ((b-A(:,1))./V1_hi) + t0; % response caution - start point (distance) over speed for each trial, plus non-decision time
+T2_hi = ((b-A(:,2))./V2_hi) + t0; 
+T1_lo = ((b-A(:,3))./V1_lo) + t0; 
+T2_lo = ((b-A(:,4))./V2_lo) + t0;  
+
+
+
+end
+
