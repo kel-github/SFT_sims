@@ -152,23 +152,27 @@ pe_SIC = (pe_sf(:,1) - pe_sf(:,2)) - (pe_sf(:,3) - pe_sf(:,4));
 
 figure;
 subplot(2,2,1)
-plot(x, se_SIC)
+plot(x, se_SIC, 'b')
 ylim([-0.4, 0.4])
 ylabel('SIC')
 xlabel('t')
+yline(0, '--')
 title('serial exhaustive')
 
 subplot(2,2,2)
-plot(x, sst_SIC)
+plot(x, sst_SIC, 'b')
 ylim([-0.4, 0.4])
+yline(0, '--')
 title('serial self terminating')
 
 subplot(2,2,3)
-plot(x, pst_SIC)
+plot(x, pst_SIC, 'b')
 ylim([-0.4, 0.4])
+yline(0, '--')
 title('parallel self terminating')
 
 subplot(2,2,4)
-plot(x, pe_SIC)
+plot(x, pe_SIC, 'b')
 ylim([-0.4, 0.4])
+yline(0, '--')
 title('parallel exhaustive')
